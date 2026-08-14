@@ -1,0 +1,27 @@
+name: OCR PDF Action
+# Define when to run job here
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  example_job:
+    runs-on: ubuntu-latest
+    name: Runing OCR PDF Action
+    steps:
+    - uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2
+    - uses: MarketingPipeline/OCR-PDF-Action@35c5f0bbcd846030902eb86aba084e350f8a7528 # main
+      with:
+        # Define the folder or file to download
+        input_file: .github/example_pdfs/Non-text-searchable.pdf
+        output_file: .github/example_pdfs/output_searchable.pdf
+        
+    # Commit the updates
+    #- name: Commit and Push PDF File
+    #  run: |
+    #     git config --global user.name "github-actions[bot]"
+    #     git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+    #     git add -A
+    #     git commit -m "Added OCR PDF"
+    #     git push

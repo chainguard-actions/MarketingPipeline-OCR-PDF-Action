@@ -1,14 +1,14 @@
-name: Test basic OCR PDF conversion
+name: Test OCR PDF output to subdirectory
 on:
   workflow_dispatch:
 
 jobs:
-  test-basic-ocr:
+  test-output-subdir:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Create an image-based PDF for OCR testing
+      - name: Create an image-based PDF and output directory
         run: |
           # Install img2pdf for image-to-PDF conversion
           sudo apt-get update -y -q
@@ -20,33 +20,36 @@ jobs:
           from PIL import Image, ImageDraw
           img = Image.new('RGB', (850, 1100), color='white')
           draw = ImageDraw.Draw(img)
-          draw.text((100, 200), "Hello OCR World", fill='black')
+          draw.text((100, 200), "OCR Subdir Test", fill='black')
           img.save('/tmp/page.png')
           PYEOF
 
           # Convert image to PDF (image-based, suitable for OCR)
-          img2pdf /tmp/page.png -o "$GITHUB_WORKSPACE/input.pdf"
+          img2pdf /tmp/page.png -o "$GITHUB_WORKSPACE/scan.pdf"
+
+          # Create the output subdirectory
+          mkdir -p "$GITHUB_WORKSPACE/ocr-results"
 
           echo "Created input PDF:"
-          ls -lh "$GITHUB_WORKSPACE/input.pdf"
+          ls -lh "$GITHUB_WORKSPACE/scan.pdf"
 
       - id: ocr-action
         uses: .
         with:
-          input_file: input.pdf
-          output_file: output.pdf
+          input_file: scan.pdf
+          output_file: ocr-results/scan_ocr.pdf
 
-      - name: Assert output PDF was created
+      - name: Assert output PDF was created in subdirectory
         run: |
-          echo "Checking for output PDF at: $GITHUB_WORKSPACE/output.pdf"
-          if [ ! -f "$GITHUB_WORKSPACE/output.pdf" ]; then
-            echo "FAIL: output.pdf was not created"
+          echo "Checking for output PDF at: $GITHUB_WORKSPACE/ocr-results/scan_ocr.pdf"
+          if [ ! -f "$GITHUB_WORKSPACE/ocr-results/scan_ocr.pdf" ]; then
+            echo "FAIL: ocr-results/scan_ocr.pdf was not created"
             exit 1
           fi
-          SIZE=$(stat -c%s "$GITHUB_WORKSPACE/output.pdf")
+          SIZE=$(stat -c%s "$GITHUB_WORKSPACE/ocr-results/scan_ocr.pdf")
           echo "Output PDF size: $SIZE bytes"
           if [ "$SIZE" -lt 100 ]; then
-            echo "FAIL: output.pdf is suspiciously small ($SIZE bytes)"
+            echo "FAIL: output PDF is suspiciously small ($SIZE bytes)"
             exit 1
           fi
-          echo "PASS: output.pdf exists and has content"
+          echo "PASS: output PDF exists in subdirectory with content"
