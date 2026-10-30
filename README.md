@@ -6,9 +6,9 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 ## Versions
 
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| v2.1.0 | [`v2.1.0`](https://github.com/chainguard-actions/MarketingPipeline-OCR-PDF-Action/tree/v2.1.0) | [`35c5f0b`](https://github.com/MarketingPipeline/OCR-PDF-Action/commit/35c5f0bbcd846030902eb86aba084e350f8a7528) |
+| Version | Tag | Upstream commit | Hardening report |
+|---------|-----|-----------------|------------------|
+| v2.1.0 | [`v2.1.0`](https://github.com/chainguard-actions/MarketingPipeline-OCR-PDF-Action/tree/v2.1.0) | [`35c5f0b`](https://github.com/MarketingPipeline/OCR-PDF-Action/commit/35c5f0bbcd846030902eb86aba084e350f8a7528) | [`HARDENING.md`](https://github.com/chainguard-actions/MarketingPipeline-OCR-PDF-Action/blob/v2.1.0/HARDENING.md) |
 
 ## Privacy
 
